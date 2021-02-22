@@ -40,12 +40,9 @@ public class ServerService {
 		 StateMachine<String,String> stateMachine = factory.getStateMachine();
 		 Server server = new Server();
 		 System.out.println("7");
-		 
 		 stateMachine.stop();
 		 stateMachine.start();
-
 		 System.out.println("6");
-		
 		if (stateMachine.getState().getId() == "create") {    // to make sure that the first request will allocate the memory first
 			 System.out.println("5");
 			LocalDateTime myObj = LocalDateTime.now();
@@ -74,7 +71,7 @@ public class ServerService {
 	}
 
 
-	
+	@Transactional(isolation = Isolation.SERIALIZABLE)
 	public Server allocateServer(int size) {
 
 		Server server = serverRepository.findByFreeMemoryGreaterThanEqualAndState(size,"active");  // to make sure that the sever is not in creating state
@@ -101,9 +98,7 @@ public class ServerService {
 				 System.out.println("4");
 				server = createServer(size);
 					
-			 }
-			 
-			 
+			 } 
 		}
 		return server;
 	}
