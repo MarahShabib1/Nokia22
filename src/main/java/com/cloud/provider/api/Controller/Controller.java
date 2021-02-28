@@ -25,12 +25,42 @@ public class Controller {
 
 	@Autowired
 	public ServerService serverService;
+	@Autowired
+	public ServerRepository serverRepository;
 
 	@GetMapping("servers")
 	public List<Server> getAllServers() {
 
 		return serverService.getAllServers();
 	}
+	
+	/*@GetMapping("create/{size}")
+	public Server createServer(@PathVariable int size) {
+		
+		 Server server = new Server();	
+			LocalDateTime myObj = LocalDateTime.now();
+			Key key = new Key("test", "test", myObj.toString());
+			server.setKey(Buffer.bytesToHexString(key.digest));
+			server.setState("create");
+			server.setRam(100);
+			server.setFreeMemory(100-size);
+			serverRepository.save(server);
+		
+		return server;
+	}
+	
+	
+	
+	@GetMapping("best/{size}")
+
+	public Server bestServer(@PathVariable int size) {
+
+		return serverRepository.findByFreeMemoryGreaterThanEqualAndStateOrderByFreeMemoryAsc(size, "create");
+	}*/
+
+	
+	
+	
 
 	@GetMapping("allocate/{size}")
 

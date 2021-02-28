@@ -25,16 +25,11 @@ import com.cloud.provider.api.model.Server;
 @EnableTransactionManagement
 public class ServerService {
 
-
-	
 	@Autowired
     StateMachineFactory<String, String> factory;
 	
 	@Autowired
 	public ServerRepository serverRepository;
-
-	
-	
 
 	public Server createServer(int size) {
 		 StateMachine<String,String> stateMachine = factory.getStateMachine();
@@ -74,14 +69,14 @@ public class ServerService {
 	@Transactional(isolation = Isolation.SERIALIZABLE)
 	public Server allocateServer(int size) {
 
-		Server server = serverRepository.findByFreeMemoryGreaterThanEqualAndState(size,"active");  // to make sure that the sever is not in creating state
+		Server server = serverRepository.findByFreeMemoryGreaterThanEqualAndStateOrderByFreeMemoryAsc(size,"active");  // to make sure that the sever is not in creating state
 		if (server != null  ) {
 			server.setFreeMemory(server.getFreeMemory() - size);
 			serverRepository.save(server);
 
 		} else {
 
-			 server = serverRepository.findByFreeMemoryGreaterThanEqualAndState(size,"create");  // if another request come while creating a new one and there is already no space it will wait to make sure that the new server may have space too 
+			 server = serverRepository.findByFreeMemoryGreaterThanEqualAndStateOrderByFreeMemoryAsc(size,"create");  // if another request come while creating a new one and there is already no space it will wait to make sure that the new server may have space too 
 			 System.out.println("1");
 			 if (server != null  ) {
 				 server.setFreeMemory(server.getFreeMemory() - size);
@@ -96,8 +91,7 @@ public class ServerService {
  
 			 }else {
 				 System.out.println("4");
-				server = createServer(size);
-					
+				server = createServer(size);		
 			 } 
 		}
 		return server;

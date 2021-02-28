@@ -13,7 +13,7 @@ public interface ServerRepository extends AerospikeRepository<Server, Integer> {
 	//@Transactional(isolation = Isolation.SERIALIZABLE)
     	Server findByFreeMemoryGreaterThanEqualAndState(int size, String state);
 
-		
+    	Server findByFreeMemoryGreaterThanEqualAndStateOrderByFreeMemoryAsc(int size, String state);
 	
 	
 }
